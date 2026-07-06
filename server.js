@@ -4,7 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Địa chỉ API của Pi Network (Testnet hoặc Mainnet)
@@ -12,7 +12,7 @@ const PI_API_URL = "https://minepi.com";
 const API_KEY = process.env.PI_API_KEY; // Lấy từ develop.pi
 
 // 1. Endpoint nhận thông báo đơn hàng từ Client (onReadyForServerApproval)
-app.post('/approve-payment', async (req, res) => {
+app.post('/api/pi/approve', async (req, res) => {
     const { paymentId } = req.body;
     try {
         // Gọi lên server Pi để chấp thuận đơn hàng
@@ -27,7 +27,7 @@ app.post('/approve-payment', async (req, res) => {
 });
 
 // 2. Endpoint hoàn thành đơn hàng sau khi blockchain đã chuyển tiền (onReadyForServerCompletion)
-app.post('/complete-payment', async (req, res) => {
+app.post('/api/pi/complete', async (req, res) => {
     const { paymentId, txid } = req.body;
     try {
         // Gọi lên server Pi để xác nhận hoàn thành đơn hàng
